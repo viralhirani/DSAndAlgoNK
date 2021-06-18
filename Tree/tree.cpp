@@ -1,7 +1,7 @@
 #include<iostream>
 #include<initializer_list>
 #include<memory>
-#include<queue>
+#include<stack>
 using namespace std;
 
 //create a symple tree class
@@ -30,6 +30,7 @@ public:
     {
         _root = new Node<T>(data);
     }
+/*
     //TODO Create a simple binary tree with initializer list.
     shared_ptr<Node<T>> insertNode(T data_)
     {
@@ -44,6 +45,7 @@ public:
         
         return _root;
     }
+    */
     Node<T>* createNode(T data_)
     {
         Node<T>* newNode = new Node<T>(data_);
@@ -52,6 +54,47 @@ public:
     Node<T>* root() { return _root;}
 
     // Traversal:
+
+    void preorder(Node<T>* temp)
+    {
+        if (temp == nullptr)
+            return;
+        cout << temp->data << ' ';
+        preorder(temp->left);
+        preorder(temp->right);
+    }
+    // Iterative preorder
+    void preorderIterative()
+    {
+        //check the root. if Root null print empty and return
+        // check root left and right. if they both are null print root and return.
+        // add right and left to stack if they are non-null
+        // every iterator get the stack top, print and add right and left
+
+        if(_root == nullptr) {
+            cout<< "The tree is empty"<< endl; 
+            return;
+        }
+        stack<Node<T>*> s;
+        Node<T>* temp = _root;
+        while(1) { // this will broken when we empty the stack.
+            while(temp) {
+                cout<< temp->data << " "; // process the current node.
+                s.push(temp); // add the current to stack so we can revisit it to visit right side of tree.
+                temp = temp->left; // travers to left tree to process.
+            }
+
+            if (s.empty()) {
+                break; // break if stack is empty so we dont have any more parent nodes to process
+            }
+            // take font fo the stack to process that parent.
+            // process the right side of sub tree.
+            temp = s.top()->right;
+            s.pop();
+           // temp = temp->right; 
+        }
+
+    }
     void inorder(Node<T>* temp)
     {
         if (temp == NULL)
@@ -62,14 +105,6 @@ public:
         inorder(temp->right);
     }
 
-    void preorder(Node<T>* temp)
-    {
-        if (temp == nullptr)
-            return;
-        cout << temp->data << ' ';
-        preorder(temp->left);
-        preorder(temp->right);
-    }
     void postorder(Node<T>* temp)
     {
         if (temp == nullptr)
@@ -103,8 +138,12 @@ int main()
     cout<<"Preorder-------"<< endl;
     myTree.preorder(myTree.root());
     cout<<endl;
+    cout<<"Preorder Iterative-------"<< endl;
+    myTree.preorderIterative();
+    cout<<endl;
     cout<<"Postorder-------"<< endl;
     myTree.postorder(myTree.root());
     cout<<endl;
+
     return 0;
 }
